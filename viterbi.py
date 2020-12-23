@@ -3,12 +3,12 @@ import math
 
 transition = np.array([
      #S0    #S1    #S2    #S3      #S4     #S5
-    [0.95,  0.05,   0,      0,      0,      0],  # InterGen(S0)
-    [0,     0,      1,      0,      0,      0],  # A(S1)
-    [0,     0,      0,      1,      0,      0],  # Codon1(S2)
-    [0,     0,      0,      0,      1,      0],  # Codon2(S3)
-    [0,     0,      0.8,    0,      0,      0.2],  # Codon3(S4)
-    [0.95,  0.05,   0,      0,      0,      0]  # T(S5)
+    [0.95,    0.05,     0.0,      0.0,      0.0,      0.0],  # InterGen(S0)
+    [0.0,     0.0,      1.0,      0.0,      0.0,      0.0],  # A(S1)
+    [0.0,     0.0,      0.0,      1.0,      0.0,      0.0],  # Codon1(S2)
+    [0.0,     0.0,      0.0,      0.0,      1.0,      0.0],  # Codon2(S3)
+    [0.0,     0.0,      0.8,      0.0,      0.0,      0.2],  # Codon3(S4)
+    [0.95,    0.05,     0.0,      0.0,      0.0,      0.0]  # T(S5)
 ])
 
 emission = np.array([
@@ -62,10 +62,22 @@ def viterbi(s, transitions, emissions):
     for i in range(1, num_of_states):
         v[i, 0] = (math.log(emission[States["InterGen(S0)"], Letters[s[0]]]), -1) #there is no previous because this is the most left column.
 
-    for j in range(0, num_of_states):
-        for i in range(1, len(s)):
+    for i in range(1, len(s)):
+
+        X_i = Letters[s[i]]
+        for j in range(0, num_of_states):
+
+            max = float('-inf')
+            max_prev_state_index = -1
+
+
             for l in range(0, num_of_states):
-                v[j,i] = math.log(emission[l, i]) + max([v[l,i-1] + transition[l,j]])
+                score = math.log(emission[j,X_i]) + float(v[i-1,l][0]) + math.log(transition[l,j])
+
+                if(score > max):
+                    max = score
+                    max_prev_state_index = l
+            v[i,j] = (max, max_prev_state_index)
     print(v)
 
 viterbi(sequence, transition, emission)
