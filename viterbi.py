@@ -80,7 +80,37 @@ def viterbi(s, transitions, emissions):
                     curr_max = score
                     max_prev_state_index = l
             v[j, i] = (curr_max, max_prev_state_index)
-    print(v)
 
 
-viterbi(sequence, transition, emission)
+    last_cloumn_max = float("-inf")
+    probabilities_of_sequence = []
+    most_probable_sequence_of_states = []
+
+    for idx in range(num_of_states):
+        if(v[idx,len(s)-1][0] > last_cloumn_max):
+            last_cloumn_max = v[idx,len(s)-1][0]
+            prev_index = v[idx,len(s)-1][1]
+            prev_probability = "{:.2f}".format(v[idx,len(s)-1][0])
+            most_probable_sequence_of_states.append(str(idx + 1))
+            probabilities_of_sequence.append(prev_probability)
+
+
+    for k in reversed(range(1, len(s))):
+        most_probable_sequence_of_states.append(str(prev_index + 1))
+        probabilities_of_sequence.append(prev_probability)
+        prev_index = v[prev_index,k-1][1]
+        prev_probability = v[prev_index,k-1][0]
+        #prev_probability = "{:.2f}".format(v[prev_index,k-1][0])  # only 2 digit after the dot
+
+    probabilities_of_sequence.reverse()
+    most_probable_sequence_of_states.reverse()
+
+    return most_probable_sequence_of_states, probabilities_of_sequence
+
+sequence_of_states = viterbi(sequence, transition, emission)[0]
+sequence_of_probabilities = viterbi(sequence, transition, emission)[1]
+
+for index in range(len(sequence)):
+    print(sequence_of_states[index],"\t|\t",sequence_of_probabilities[index])
+
+
