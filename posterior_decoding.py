@@ -9,4 +9,54 @@ from constants import sequence, transition_matrix, emission_matrix, states, lett
 
 
 def posterior_decoding(s, transitions, emissions):
-    pass
+    F = forward(s, transitions, emissions)
+    B = backward(s, transitions, emissions)
+
+    num_of_states = len(emissions)
+    sum = 0
+
+    # Checking from slide 28
+    for j in range(num_of_states):
+        sum += F[j,0] * B[j,0]
+    if(sum == B[0,0]):
+        print("The values are the same")
+    print(sum,", ", B[0,0])
+
+
+    """*****************************************************************
+    Computation of log-probabilities – with sums - ON FORWARD 
+    *****************************************************************"""
+
+    f = np.zeros((num_of_states, len(sequence)), dtype=float)
+
+    f[0, 0] = 1
+    for i in range(1, num_of_states):
+        f[i, 0] = 0
+
+    for i in range(0, len(sequence)):
+        X_i = letters[s[i]]
+        for j in range(1, num_of_states):
+
+            curr_max = float('-inf')
+            emit = emissions[j, X_i]
+            if emit == 0.0:
+                emit = sys.float_info.epsilon
+
+            for l in range(0, num_of_states):
+                score = F[l, i]
+
+                if score > curr_max: # Find the maximum
+                    curr_max = score
+            Sigma = 0
+
+            for l in range(0, num_of_states):
+                trans = transitions[l, j]
+                if trans == 0.0:
+                    trans = sys.float_info.epsilon
+
+                Sigma += math.exp(F[l, i - 1] - curr_max) + math.log(trans)    # Calculate the "Trick"  --> math.exp(F[l, i - 1] - curr_max) == b_l == a_l - a_max
+                f[j, i] = math.log(Sigma) + math.log(emit) + curr_max       # a_max + log(Sigma) + log(emission)  --> Slide 35 last line
+
+
+    print(f)
+posterior_decoding(sequence, transition_matrix, emission_matrix)

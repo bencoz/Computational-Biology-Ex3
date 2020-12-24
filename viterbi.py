@@ -64,4 +64,4 @@ def viterbi(s, transitions, emissions):
 sequence_of_probabilities, sequence_of_states = viterbi(sequence, transition_matrix, emission_matrix)
 
 for index in range(len(sequence)):
-    print(sequence_of_states[index], "\t|\t", sequence_of_probabilities[index])
+    print(sequence_of_probabilities[index], "\t|\t", sequence_of_states[index])
