@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from constants import sequence, transition_matrix, emission_matrix, states, letters
+from constants import sequence, transition_matrix, emission_matrix
 
 
 def forward(s, transitions, emissions):
@@ -15,13 +15,12 @@ def forward(s, transitions, emissions):
         f[i, 0] = 0
 
     for i in range(1, len(s)):
-        X_i = letters[s[i]]
         for j in range(0, num_of_states):
-            emission = emissions[j, X_i]
+            emission = emissions[j].get(s[i])
             for l in range(0, num_of_states):
                 # Regular
                 f[j, i] += f[l, i - 1] * transitions[l, j] * emission
-    print(f)
+    return f
 
 
 forward(sequence, transition_matrix, emission_matrix)

@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import sys
-from constants import sequence, transition_matrix, emission_matrix, states, letters
+from constants import sequence, transition_matrix, emission_matrix
 
 
 def viterbi(s, transitions, emissions):
@@ -12,17 +12,14 @@ def viterbi(s, transitions, emissions):
     v[0, 0] = (math.log(1), -1)  # the tuple is to know from what i value in the previous column the maximum was chosen.
     # initialize v[0, j]
     for i in range(1, num_of_states):
-        v[i, 0] = (math.log(emissions[states["InterGen(S0)"], letters[s[0]]]),
-                   -1)  # there is no previous because this is the most left column.
+        v[i, 0] = (math.log(emissions[0].get(s[0])), -1)  # there is no previous because this is the most left column.
 
     for i in range(1, len(s)):
-
-        X_i = letters[s[i]]
         for j in range(0, num_of_states):
 
             curr_max = float('-inf')
             max_prev_state_index = -1
-            emit = emissions[j, X_i]
+            emit = emissions[j].get(s[i])
             if emit == 0.0:
                 emit = sys.float_info.epsilon
             for l in range(0, num_of_states):

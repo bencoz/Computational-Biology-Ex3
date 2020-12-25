@@ -11,29 +11,13 @@ transition_matrix = np.array([
 ])
 
 emission_matrix = np.array([
-    # A      #C      #T      #G
-    [0.3, 0.2, 0.3, 0.2],  # InterGen(S0)
-    [1.0, 0.0, 0.0, 0.0],  # A(S1)
-    [0.0, 0.4, 0.2, 0.4],  # Codon1(S2)
-    [0.0, 0.4, 0.2, 0.4],  # Codon2(S3)
-    [0.0, 0.4, 0.2, 0.4],  # Codon3(S4)
-    [0.0, 0.0, 1.0, 0.0]  # T(S5)
+     #A        #C       #T        #G
+    {'A': 0.3, 'C': 0.2, 'T': 0.3, 'G': 0.2},  # InterGen(S0)
+    {'A': 1.0, 'C': 0.0, 'T': 0.0, 'G': 0.0},  # A(S1)
+    {'A': 0.0, 'C': 0.4, 'T': 0.2, 'G': 0.4},  # Codon1(S2)
+    {'A': 0.0, 'C': 0.4, 'T': 0.2, 'G': 0.4},  # Codon2(S3)
+    {'A': 0.0, 'C': 0.4, 'T': 0.2, 'G': 0.4},  # Codon3(S4)
+    {'A': 0.0, 'C': 0.0, 'T': 1.0, 'G': 0.0},  # T(S5)
 ])
-
-states = {
-    "InterGen(S0)": 0,
-    "A(S1)": 1,
-    "Codon1(S2)": 2,
-    "Codon2(S3)": 3,
-    "Codon3(S4)": 4,
-    "T(S5)": 5
-}
-
-letters = {
-    "A": 0,
-    "C": 1,
-    "T": 2,
-    "G": 3
-}
 
 sequence = "CCATCGCACTCCGATGTGGCCGGTGCTCACGTTGCCT"

@@ -5,7 +5,7 @@ import sys
 from forward import forward
 from backward import backward
 
-from constants import sequence, transition_matrix, emission_matrix, states, letters
+from constants import sequence, transition_matrix, emission_matrix
 
 
 def posterior_decoding(s, transitions, emissions):
@@ -17,11 +17,10 @@ def posterior_decoding(s, transitions, emissions):
 
     # Checking from slide 28
     for j in range(num_of_states):
-        sum += F[j,0] * B[j,0]
-    if(sum == B[0,0]):
+        sum += F[j, 0] * B[j, 0]
+    if (sum == B[0, 0]):
         print("The values are the same")
-    print(sum,", ", B[0,0])
-
+    print(sum, ", ", B[0, 0])
 
     """*****************************************************************
     Computation of log-probabilities – with sums - ON FORWARD 
@@ -34,18 +33,17 @@ def posterior_decoding(s, transitions, emissions):
         f[i, 0] = 0
 
     for i in range(0, len(sequence)):
-        X_i = letters[s[i]]
         for j in range(1, num_of_states):
 
             curr_max = float('-inf')
-            emit = emissions[j, X_i]
+            emit = emissions[j].get(s[i])
             if emit == 0.0:
                 emit = sys.float_info.epsilon
 
             for l in range(0, num_of_states):
                 score = F[l, i]
 
-                if score > curr_max: # Find the maximum
+                if score > curr_max:  # Find the maximum
                     curr_max = score
             Sigma = 0
 
@@ -54,9 +52,12 @@ def posterior_decoding(s, transitions, emissions):
                 if trans == 0.0:
                     trans = sys.float_info.epsilon
 
-                Sigma += math.exp(F[l, i - 1] - curr_max) + math.log(trans)    # Calculate the "Trick"  --> math.exp(F[l, i - 1] - curr_max) == b_l == a_l - a_max
-                f[j, i] = math.log(Sigma) + math.log(emit) + curr_max       # a_max + log(Sigma) + log(emission)  --> Slide 35 last line
-
+                Sigma += math.exp(F[l, i - 1] - curr_max) + math.log(
+                    trans)  # Calculate the "Trick"  --> math.exp(F[l, i - 1] - curr_max) == b_l == a_l - a_max
+                f[j, i] = math.log(Sigma) + math.log(
+                    emit) + curr_max  # a_max + log(Sigma) + log(emission)  --> Slide 35 last line
 
     print(f)
+
+
 posterior_decoding(sequence, transition_matrix, emission_matrix)

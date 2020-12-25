@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import sys
-from constants import sequence, transition_matrix, emission_matrix, states, letters
+from constants import sequence, transition_matrix, emission_matrix
 
 
 def backward(s, transitions, emissions):
@@ -15,18 +15,17 @@ def backward(s, transitions, emissions):
         b[i, len(s) - 1] = 1 # The most left column
 
     for i in reversed(range(0, len(s) - 1)):
-        X_i = letters[s[i + 1]] # Because of backward, we want the X_i+1
         for j in range(0, num_of_states):
             for l in range(0, num_of_states):
                 transition = transitions[l, j]
-                emission = emissions[l, X_i]  #emission inserted into the "l" for because he is being dependent on l
+                emission = emissions[l].get(s[i+1])  #emission inserted into the "l" for because he is being dependent on l
 
                 b[j, i] += b[l, i + 1] * transition * emission
 
     return(b)
 
 
-#print(backward(sequence, transition_matrix, emission_matrix))
+print(backward(sequence, transition_matrix, emission_matrix))
 
 
 
