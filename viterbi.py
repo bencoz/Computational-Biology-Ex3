@@ -17,23 +17,26 @@ def viterbi(s, transitions, emissions):
     for i in range(1, len(s)):
         for j in range(0, num_of_states):
 
-            curr_max = float('-inf')
+            curr_max = -math.inf
             max_prev_state_index = -1
-            emit = emissions[j].get(s[i])
-            if emit == 0.0:
-                emit = sys.float_info.epsilon
+            emission = emissions[j].get(s[i])
+            if emission == 0.0:
+                log_emit = -math.inf
+            else:
+                log_emit = math.log(emission)
             for l in range(0, num_of_states):
-                trans = transitions[l, j]
-                if trans == 0.0:
-                    trans = sys.float_info.epsilon
-                score = math.log(emit) + float(v[l, i - 1][0]) + math.log(trans)
+                if transitions[l, j] == 0.0:
+                    log_trans = -math.inf
+                else:
+                    log_trans = math.log(transitions[l, j])
+                score = log_emit + float(v[l, i - 1][0]) + log_trans
 
                 if score > curr_max:
                     curr_max = score
                     max_prev_state_index = l
             v[j, i] = (curr_max, max_prev_state_index)
 
-    last_cloumn_max = float("-inf")
+    last_cloumn_max = -math.inf
     probabilities_of_sequence = []
     most_probable_sequence_of_states = []
 

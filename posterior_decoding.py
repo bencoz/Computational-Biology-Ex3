@@ -17,8 +17,11 @@ def posterior_decoding(s, transitions, emissions):
 
     # Checking from slide 28
     for j in range(num_of_states):
-        sum += F[j, 0] * B[j, 0]
-    if (sum == B[0, 0]):
+        curr = F[j, len(s) - 1]
+        if curr > -math.inf:
+            sum += curr
+    ratio = sum / B[0, 0]
+    if math.fabs(1 - ratio) < 0.0000000001:
         print("The values are the same")
     print(sum, ", ", B[0, 0])
 
