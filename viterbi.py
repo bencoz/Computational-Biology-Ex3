@@ -2,6 +2,7 @@ import numpy as np
 import math
 import sys
 from constants import sequence, transition_matrix, emission_matrix
+from utils import mylog
 
 
 def viterbi(s, transitions, emissions):
@@ -16,20 +17,11 @@ def viterbi(s, transitions, emissions):
 
     for i in range(1, len(s)):
         for j in range(0, num_of_states):
-
             curr_max = -math.inf
             max_prev_state_index = -1
             emission = emissions[j].get(s[i])
-            if emission == 0.0:
-                log_emit = -math.inf
-            else:
-                log_emit = math.log(emission)
             for l in range(0, num_of_states):
-                if transitions[l, j] == 0.0:
-                    log_trans = -math.inf
-                else:
-                    log_trans = math.log(transitions[l, j])
-                score = log_emit + float(v[l, i - 1][0]) + log_trans
+                score = mylog(emission) + float(v[l, i - 1][0]) + mylog(transitions[l, j])
 
                 if score > curr_max:
                     curr_max = score

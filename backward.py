@@ -2,6 +2,7 @@ import numpy as np
 import math
 import sys
 from constants import sequence, transition_matrix, emission_matrix
+from utils import mylog
 
 
 def backward(s, transitions, emissions):
@@ -19,19 +20,9 @@ def backward(s, transitions, emissions):
             a_max = sys.float_info.min
             a_l = []
             for l in range(0, num_of_states):
-                transition = transitions[l, j]
-                if transition == 0.0:
-                    log_trans = -math.inf
-                else:
-                    log_trans = math.log(transitions[l, j])
-                emission = emissions[l].get(
-                    s[i + 1])  # emission inserted into the "l" for because he is being dependent on l
-                if emission == 0.0:
-                    log_emit = -math.inf
-                else:
-                    log_emit = math.log(emission)
+                emission = emissions[l].get(s[i + 1])  # emission inserted into the "l" for because he is being dependent on l
 
-                curr = b[l, i + 1] + log_trans + log_emit
+                curr = b[l, i + 1] + mylog(transitions[j, l]) + mylog(emission)
                 if curr > a_max:
                     a_max = curr
                 a_l.append(curr)
@@ -44,13 +35,9 @@ def backward(s, transitions, emissions):
                 b_l = a_l[l] - a_max
                 b[j, i] += math.exp(b_l)
 
-            if b[j, i] == 0.0:
-                log_f = -math.inf
-            else:
-                log_f = math.log(b[j, i])
-            b[j, i] = log_f + a_max
+            b[j, i] = mylog(b[j, i]) + a_max
 
-    return (b)
+    return b
 
 
-print(backward(sequence, transition_matrix, emission_matrix))
+backward(sequence, transition_matrix, emission_matrix)
