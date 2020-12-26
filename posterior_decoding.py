@@ -60,7 +60,7 @@ def posterior_decoding(s, transitions, emissions):
             if curr > max:
                 state = j
                 max = curr
-        highest_posterior_probability[i] = state
+        highest_posterior_probability[i] = state + 1
 
     return highest_posterior_probability
 
