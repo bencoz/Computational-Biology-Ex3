@@ -12,9 +12,13 @@ def forward(s, transitions, emissions):
     f = np.zeros((num_of_states, s_length), dtype=float)
 
     # initialize f[0, i]
-    f[0, 0] = 1
+    # Regular
+    # f[0, 0] = 1
+    f[0, 0] = math.log(1)
     for i in range(1, num_of_states):
-        f[i, 0] = 0
+        # Regular
+        # f[i, 0] = 0
+        f[i, 0] = mylog(0)
 
     for i in range(1, len(s)):
         for j in range(0, num_of_states):
@@ -46,4 +50,4 @@ def forward(s, transitions, emissions):
     return f
 
 
-forward(sequence, transition_matrix, emission_matrix)
+# forward(sequence, transition_matrix, emission_matrix)

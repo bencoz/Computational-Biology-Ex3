@@ -40,4 +40,4 @@ def backward(s, transitions, emissions):
     return b
 
 
-backward(sequence, transition_matrix, emission_matrix)
+# backward(sequence, transition_matrix, emission_matrix)
