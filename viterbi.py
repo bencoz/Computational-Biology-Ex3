@@ -28,32 +28,29 @@ def viterbi(s, transitions, emissions):
                     max_prev_state_index = l
             v[j, i] = (curr_max, max_prev_state_index)
 
-    last_cloumn_max = -math.inf
-    probabilities_of_sequence = []
-    most_probable_sequence_of_states = []
-
+    last_column_max = -math.inf
+    result = []
+    # Find the max in the last column
+    prev_index = -1
     for idx in range(num_of_states):
-        if (v[idx, len(s) - 1][0] > last_cloumn_max):
-            last_cloumn_max = v[idx, len(s) - 1][0]
-            prev_index = v[idx, len(s) - 1][1]
-            prev_probability = "{:.2f}".format(v[idx, len(s) - 1][0])
-            most_probable_sequence_of_states.append(str(idx + 1))
-            probabilities_of_sequence.append(prev_probability)
+        if v[idx, len(s) - 1][0] > last_column_max:
+            last_column_max = v[idx, len(s) - 1][0]
+            prev_index = idx
 
-    for k in reversed(range(1, len(s))):
-        most_probable_sequence_of_states.append(str(prev_index + 1))
-        probabilities_of_sequence.append(prev_probability)
-        prev_index = v[prev_index, k - 1][1]
-        prev_probability = v[prev_index, k - 1][0]
-        # prev_probability = "{:.2f}".format(v[prev_index,k-1][0])  # only 2 digit after the dot
+    # Reconstructing
+    for k in reversed(range(0, len(s))):
+        result.append((
+            s[k], prev_index, "{:.2f}".format(v[prev_index, k][0])
+        ))
+        prev_index = v[prev_index, k][1]
 
-    probabilities_of_sequence.reverse()
-    most_probable_sequence_of_states.reverse()
+    result.reverse()
 
-    return most_probable_sequence_of_states, probabilities_of_sequence
+    return result
 
 
-sequence_of_probabilities, sequence_of_states = viterbi(sequence, transition_matrix, emission_matrix)
+result = viterbi(sequence, transition_matrix, emission_matrix)
 
+print("Base\t|\tState\t|\tProb")
 for index in range(len(sequence)):
-    print(sequence_of_probabilities[index], "\t|\t", sequence_of_states[index])
+    print(result[index][0], "\t\t|\t", result[index][1], "\t\t|\t", result[index][2])
