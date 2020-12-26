@@ -5,7 +5,7 @@ import sys
 from forward import forward
 from backward import backward
 
-from constants import sequence, transition_matrix, emission_matrix
+from constants import sequence, transition_matrix, emission_matrix, emission_matrix2
 
 
 def posterior_decoding(s, transitions, emissions):
@@ -64,5 +64,8 @@ def posterior_decoding(s, transitions, emissions):
 
     return highest_posterior_probability
 
-
+print("********************************* d *********************************")
 print(posterior_decoding(sequence, transition_matrix, emission_matrix))
+print("********************************* h *********************************")
+print(posterior_decoding(sequence, transition_matrix, emission_matrix2))
+print("*********************************************************************")

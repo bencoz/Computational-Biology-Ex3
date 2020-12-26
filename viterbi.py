@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import sys
-from constants import sequence, transition_matrix, emission_matrix
+from constants import sequence, transition_matrix, emission_matrix, emission_matrix2
 from utils import mylog
 
 
@@ -50,7 +50,26 @@ def viterbi(s, transitions, emissions):
 
 
 result = viterbi(sequence, transition_matrix, emission_matrix)
+result_h = viterbi(sequence, transition_matrix, emission_matrix2)
 
+print("************************************* d *******************************************")
+
+"""  (d)  """
 print("Base\t|\tState\t|\tProb")
 for index in range(len(sequence)):
     print(result[index][0], "\t\t|\t", result[index][1], "\t\t|\t", result[index][2])
+
+print("************************************* h *******************************************")
+
+"""  (h)  """
+print("Base\t|\tState\t|\tProb")
+for index in range(len(sequence)):
+    print(result_h[index][0], "\t\t|\t", result_h[index][1], "\t\t|\t", result_h[index][2])
+
+a=""
+for index in range(len(sequence)):
+    a+=str(result_h[index][1] + 1)
+    a += "-"
+
+print(a)
+print("***********************************************************************************")
