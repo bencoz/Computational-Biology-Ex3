@@ -40,7 +40,7 @@ def viterbi(s, transitions, emissions):
     # Reconstructing
     for k in reversed(range(0, len(s))):
         result.append((
-            s[k], prev_index, "{:.2f}".format(v[prev_index, k][0])
+            s[k], prev_index, v[prev_index, k][0]
         ))
         prev_index = v[prev_index, k][1]
 
@@ -52,24 +52,24 @@ def viterbi(s, transitions, emissions):
 result = viterbi(sequence, transition_matrix, emission_matrix)
 result_h = viterbi(sequence, transition_matrix, emission_matrix2)
 
-print("************************************* d *******************************************")
+print("\n************************************* section (d) *******************************************\n")
 
 """  (d)  """
 print("Base\t|\tState\t|\tProb")
 for index in range(len(sequence)):
-    print(result[index][0], "\t\t|\t", result[index][1], "\t\t|\t", result[index][2])
+    print(result[index][0], "\t\t|\t", result[index][1] + 1, "\t\t|\t", result[index][2])
 
-print("************************************* h *******************************************")
+print("\n************************************* section (h) *******************************************\n")
 
 """  (h)  """
 print("Base\t|\tState\t|\tProb")
 for index in range(len(sequence)):
-    print(result_h[index][0], "\t\t|\t", result_h[index][1], "\t\t|\t", result_h[index][2])
+    print(result_h[index][0], "\t\t|\t", result_h[index][1] + 1, "\t\t|\t", result_h[index][2])
 
 a=""
 for index in range(len(sequence)):
     a+=str(result_h[index][1] + 1)
     a += "-"
 
-print(a)
-print("***********************************************************************************")
+print("\n",a)
+print("\n***********************************************************************************")

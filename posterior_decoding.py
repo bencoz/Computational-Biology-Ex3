@@ -45,13 +45,14 @@ def posterior_decoding(s, transitions, emissions):
                 max = curr
                 state = j
             posterior_conditional_probability[j, i] = curr
-        print(f"{s[i]}\t\t|\t{state}\t\t|\t{max}")
+        print(f"{s[i]}\t\t|\t{state + 1}\t\t|\t{max}")
 
-
+    print("\n")
 
     # for each position i along the sequence the HMM state s
     # with highest posterior probability for that position: P(Si=s|X,HMM).
-    highest_posterior_probability = np.zeros(len(s))
+    #highest_posterior_probability = np.zeros(len(s))
+    highest_posterior_probability = ""
     for i in range(0, len(s)):
         max = -math.inf
         state = -1
@@ -60,12 +61,13 @@ def posterior_decoding(s, transitions, emissions):
             if curr > max:
                 state = j
                 max = curr
-        highest_posterior_probability[i] = state + 1
+        #highest_posterior_probability[i] = state + 1
+        highest_posterior_probability += "-" + str(state + 1)
 
     return highest_posterior_probability
 
-print("********************************* d *********************************")
+print("\n********************************* section (d) *********************************\n")
 print(posterior_decoding(sequence, transition_matrix, emission_matrix))
-print("********************************* h *********************************")
+print("\n********************************* section (h) *********************************\n")
 print(posterior_decoding(sequence, transition_matrix, emission_matrix2))
-print("*********************************************************************")
+print("\n*********************************************************************")
